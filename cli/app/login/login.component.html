@@ -1,0 +1,55 @@
+<div class="exc-pagetop">
+    <div class="mdl-cell mdl-cell--12-col mdl-cell--hide-phone">
+        <div class="mdl-grid mdl-cell--middle mdl-grid--no-spacing mdl-card mdl-shadow--2dp mdl-cell--6-col">
+            <div class="mdl-cell--4-col mdl-cell--12-col-tablet mdl-cell--hide-phone mdl-color-text--white exc-logocolor">
+                <img src="assets/lock.svg" alt="Login" class="mdl-cell mdl-cell--12-col mdl-cell--1-col-tablet mdl-cell--hide-phone">
+            </div>
+            <div class="mdl-cell--8-col mdl-cell--7-col-tablet">
+                <div class="mdl-card__supporting-text">
+                    <h3>
+                        <span *ngIf="!authService.isLoggedIn">Login</span>
+                        <span *ngIf="authService.isLoggedIn">Logout</span>
+                    </h3>
+                    <span *ngIf="!authService.isLoggedIn"> Please enter your username and password.</span>
+                    <span *ngIf="authService.isLoggedIn">Press SUBMIT to log off from the system.</span>
+                    <form #form="ngForm" (ngSubmit)="submit(form.value)">
+                        <div *ngIf="!authService.isLoggedIn">
+                            <mdl-textfield [class.is-invalid]="username.invalid"
+                                           label="User name"
+                                           type="text"
+                                           autofocus
+                                           required
+                                           name="username"
+                                           [(ngModel)]="username"
+                                           error-msg="Required"
+                                           disableNativeValidityChecking=true></mdl-textfield>
+
+                            <mdl-textfield label="Password"
+                                           type="password"
+                                           name="password"
+                                           [(ngModel)]="password"></mdl-textfield>
+
+
+                            <div class="mdl-card__actions">
+                                <button type="submit" class="mdl-button" style="float:right" [disabled]="!form.valid">
+                                    Submit
+                                </button>
+                            </div>
+
+                        </div>
+                        <div *ngIf="authService.isLoggedIn">
+                            <br />
+                            <div class="mdl-card__actions">
+                                <button type="reset" class="mdl-button" style="float:right" (click)="logout()">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+                        {{message}}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

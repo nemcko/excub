@@ -1,0 +1,12 @@
+{
+  "port": 8000,
+  "files": [ "./dist/app/**/*.{html,htm,css,js}" ],
+  "server": { "baseDir": "./dist/" },
+  "injectChanges": false,
+  "watchOptions": {
+    "ignored": [
+      "node_modules",
+      "./app"
+    ]
+  }
+}

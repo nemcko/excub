@@ -1,0 +1,25 @@
+
+<table class="mdl-data-table mdl-cell--12-col">
+    <thead>
+        <tr>
+            <th class="mdl-data-table__cell"></th>
+            <th class="mdl-data-table__cell--non-numeric">NAME</th>
+            <th class="mdl-data-table__cell--non-numeric">NOTE</th>
+            <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">CREATED</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr *ngFor="let item of items; let row_num = index">
+            <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)" style="padding: 4px !important;width:48px;"
+                [ngClass]="{'mdl-color--purple-400': item.source_type==='video','mdl-color--indigo-400': item.source_type==='image','mdl-color--cyan-400': item.source_type==='camera','mdl-color--orange-400': item.source_type==='folder'}"
+                >
+                <nasfile [src]="item.thumbnail_url" [period]="10" class="exc-thumb"></nasfile>
+            </td>
+            <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.name}}</td>
+            <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.note}}</td>
+            <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.created | toDateTime | date: 'dd.MM.yy HH:mm'}}</td>
+        </tr>
+    </tbody>
+</table>
+<navpanel [oid]="'persinsour'" [qvalue]="qvalue" [numitems]="numitems" [autohide]="autohidepanel" (ondata)="onData($event)"></navpanel>

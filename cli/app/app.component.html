@@ -1,0 +1,101 @@
+<div class="exc-layout" mdl-shadow="2">
+    <mdl-layout mdl-layout-fixed-drawer mdl-layout-fixed-header mdl-layout-header-seamed class="mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <mdl-layout-header class="mdl-color--grey-50 mdl-color-text--grey-600 hide-largetablet">
+            <mdl-layout-header-row class="mdl-shadow--2dp mdl-color--grey-50">
+                <mdl-layout-title><img src="favicon.ico">&nbsp;<span *ngIf="authService.isLoggedIn">{{appsvc.header.title}}</span></mdl-layout-title>
+                <mdl-layout-spacer></mdl-layout-spacer>
+                <nav class="mdl-navigation">
+                    <menu-component [menuData]="menuData"></menu-component>
+                    <loginbtn></loginbtn>
+                </nav>
+            </mdl-layout-header-row>
+        </mdl-layout-header>
+
+        <mdl-layout-drawer class="exc-drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50" [ngClass]="{short: !largeMenu}">
+            <mdl-layout-header-row class="exc-drawer-header hide-tabphone" style="background-color:#fcfcfc" (click)="largeMenu=!largeMenu">
+                <img *ngIf="largeMenu" src="assets/logo.png" class="exc-logo">
+                <img *ngIf="!largeMenu" src="assets/logo_s.png" class="exc-logo_s">
+                <div *ngIf="largeMenu" class="mdl-typography--headline exc-instname">
+                    {{appsvc.instName}}
+                </div>
+                <div *ngIf="authService.isLoggedIn && largeMenu" class="mdl-typography--caption exc-logo-1">
+                    Používateľ: {{currentUser.fullname}}<br /> Profil: {{currentUser.role}}<br />
+                </div>
+            </mdl-layout-header-row>
+            <nav class="exc-navigation mdl-navigation mdl-color--blue-grey-800 hide-tabphone">
+                <div *ngIf="authService.isLoggedIn && largeMenu">
+                    <div class="exc-menuitem" *ngFor="let submenu of appsvc.getMenus(); let idx=index;">
+                        <a class="mdl-navigation__link" href="javascript:void(0)" (click)="selectMenuItem(submenu)">
+                            <i class="mdl-color-text--blue-grey-500 material-icons" role="presentation">{{submenu.icon}}</i>
+                            <span>{{submenu.name}}</span>
+                        </a>
+                    </div>
+                </div>
+                <div *ngIf="authService.isLoggedIn && !largeMenu">
+                    <div class="exc-menuitem mdl-navigation__link.short" *ngFor="let submenu of appsvc.getMenus(); let idx=index;">
+                        <button mdl-button #btn{{idx}}="mdlButton" [attr.id]="'btn'+idx" (click)="selectMenuItem(submenu)" mdl-button-type="icon" mdl-ripple mdl-tooltip="{{submenu.name}}">
+                            <i class="mdl-color-text--blue-grey-500 material-icons" role="presentation">{{submenu.icon}}</i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mdl-layout-spacer"></div>
+                <div class="hide-tabphone">
+                    <loginbtn></loginbtn>
+                </div>
+            </nav>
+
+
+            <mdl-layout-header-row class="hide-largetablet" (click)="largeMenu=!largeMenu">
+                <img src="assets/logo.png" class="exc-logo">
+            </mdl-layout-header-row>
+            <nav class="exc-navigation mdl-navigation hide-largetablet">
+                <div *ngIf="authService.isLoggedIn">
+                    <div class="exc-menuitem" *ngFor="let submenu of appsvc.getMenus(); let idx=index;">
+                        <a class="mdl-navigation__link" href="javascript:void(0)" (click)="selectMenuItem(submenu)">
+                            <i class="mdl-color-text--blue-grey-500 material-icons" role="presentation">{{submenu.icon}}</i>
+                            <span>{{submenu.name}}</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mdl-layout-spacer"></div>
+                <div class="hide-tabphone">
+                    <loginbtn></loginbtn>
+                </div>
+            </nav>
+        </mdl-layout-drawer>
+
+
+
+
+        <mdl-layout-content  [ngClass]="{short: !largeMenu}">
+            <div class="exc-page" [ngClass]="{short: !largeMenu}">
+                <mdl-layout-header class="exc-header" [ngClass]="appsvc.activemenu.color||'mdl-color--light-blue'">
+                    <div class="exc-pageright">
+                        <menu-component [menuData]="menuData"></menu-component>
+                        <a *ngIf="authService.isLoggedIn" class="mdl-navigation__link" href="javascript:void(0)" (click)="logout()" mdl-tooltip="LogOut">
+                            <i class="material-icons" role="presentation">power_settings_new</i>
+                        </a>
+                    </div>
+
+
+                    <h3 class="mdl-color-text--white"><span *ngIf="authService.isLoggedIn">{{appsvc.header.title}}</span>&nbsp;</h3>
+                    <h4 class="mdl-color-text--blue-grey-100"><span *ngIf="authService.isLoggedIn">{{appsvc.header.desc}}</span>&nbsp;</h4>
+                    <mdl-layout-header-row>
+                    </mdl-layout-header-row>
+                </mdl-layout-header>
+                <router-outlet></router-outlet>
+            </div>
+
+        </mdl-layout-content>
+    </mdl-layout>
+</div>
+<div *ngFor="let submenu of appsvc.getMenus(); let idx=index;" mdl-menu-position="bottom-left" [attr.id]="'m'+idx">
+    <mdl-menu class="mdl-color--white">
+        <mdl-menu-item mdl-ripple *ngFor="let lnk of submenu.links" (click)="selectMenuItem(lnk)" class="mdl-color-text--black">
+            <i class="mdl-color-text--blue-grey-400 material-icons" [attr.id]="'ul-hlmitem'+submenu.icon+idx" style="position:relative;top:6px;">{{lnk.icon}}</i>
+            <span>{{lnk.name}}</span>
+        </mdl-menu-item>
+    </mdl-menu>
+</div>

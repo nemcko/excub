@@ -1,0 +1,77 @@
+<div class="exc-content mdl-grid">
+    <div class="exc-desc mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <h3><i class="material-icons">dns</i>Media sources</h3>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('video')"><strong class="mdl-color-text--purple-400">Video</strong></a>&nbsp;an electronic medium for the recording, copying, playback, broadcasting, and display of moving visual media.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('image')"><strong class="mdl-color-text--indigo-400">Image</strong></a>&nbsp;visual perception, that has a similar appearance to some physical object or a person.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('camera')"><strong class="mdl-color-text--cyan-400">Live Camera</strong></a>&nbsp;the electronic screen with the live preview image.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('folder')"><strong class="mdl-color-text--orange-400">Folder</strong></a>&nbsp;container containing videos, images, cameras and other folders.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('')"><strong>All</strong></a>&nbsp;items of the current folder.</p>
+    </div>
+
+
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="exc-table">
+            <div class="exc-table_title">
+                <div class="display-1">
+                    <div>
+                        <a href="javascript:void(0)" (click)="onChangeParent('')">/<span>Root</span></a>
+                        <a href="javascript:void(0)" (click)="onChangeParent(lnk.code)" *ngFor="let lnk of parentFolders">/<span>{{lnk.name}}</span></a>
+                        &nbsp;<small *ngIf="qtype" class="exc-dimmed">({{qtype}})</small>
+                    </div>
+
+                </div>
+            </div>
+
+            <table class="mdl-data-table mdl-cell--12-col">
+                <thead> 
+                    <tr>
+                        <th class="mdl-data-table__cell" colspan="2"></th>
+                        <th class="mdl-data-table__cell--non-numeric">NAME</th>
+                        <th class="mdl-data-table__cell--non-numeric">NOTE</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">TYPE</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">STATUS</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">CREATED</th>
+                       <th class="exc-table_but">
+                            <button #editUserButton mdl-button mdl-button-type="icon" (click)="openDetail($event)" mdl-tooltip="New">
+                                <mdl-icon>add</mdl-icon>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items; let row_num = index">
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)" style="margin:0px !important;padding:2px !important; width:1px !important;" [ngClass]="{'mdl-color--purple-400': item.source.source_type==='video','mdl-color--indigo-400': item.source.source_type==='image','mdl-color--cyan-400': item.source.source_type==='camera','mdl-color--orange-400': (item.source.source_type==='folder'||item.source.source_type==='scan_input'||item.source.source_type==='scan_training')}"></td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)" style="padding: 0px !important;width:48px;">
+                            <nasfile *ngIf="!isFolder(item)" [src]="item.thumbnail_url" [period]="10" class="exc-thumb"></nasfile>
+                            <img *ngIf="isFolder(item)" src="assets/folder.png" class="exc-folder">
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.name}}</td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.note}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.source.source_type}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.status}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.created | toDateTime | date: 'dd.MM.yy HH:mm'}}</td>
+                        <td>
+                            <button mdl-button #btn1="mdlButton" (click)="m1.toggle($event, btn1)" mdl-button-type="icon" mdl-ripple mdl-tooltip="Row menu"><mdl-icon class="exc-dimmed">more_vert</mdl-icon></button>
+                            <mdl-menu #m1="mdlMenu" mdl-menu-position="bottom-right">
+                                <div mdl-menu-item-full-bleed-divider> 
+                                    <div *ngFor="let menuitem of rconfig">
+                                        <mdl-menu-item mdl-ripple (click)="bgproc(item.id,menuitem.name,$event)" *ngIf="menuitem.source_types.indexOf(item.source.source_type)!==-1">{{menuitem.name}}</mdl-menu-item>
+                                    </div>
+                                </div>
+                                <mdl-menu-item mdl-ripple *ngIf="isFolder(item)" (click)="openDetail($event,item)">Select</mdl-menu-item>
+                                <mdl-menu-item mdl-ripple (click)="editDetail($event,item)" mdl-menu-item-full-bleed-divider>Edit</mdl-menu-item>
+                                <mdl-menu-item mdl-ripple *ngIf="!isFolder(item)" (click)="removeRow(item,$event)">Delete</mdl-menu-item>
+                                <mdl-menu-item mdl-ripple *ngIf="isFolder(item)" (click)="deleteAll(item,$event)">Delete source</mdl-menu-item>
+                                <mdl-menu-item mdl-ripple *ngIf="isFolder(item)" (click)="deleteExc(item,$event)">Delete except subfolders</mdl-menu-item>
+                            </mdl-menu>
+
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+            <navpanel [oid]="oid" [qtype]="qtype" [qparent]="qparent" [qvalue]="qvalue" [qtime]="qtime" (ondata)="onData($event)"></navpanel>
+        </div>
+    </div>
+</div>
+<dialog-outlet></dialog-outlet>

@@ -1,0 +1,69 @@
+<div class="exc-content mdl-grid">
+    <div class="exc-desc mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <h3><i class="material-icons">people_outline</i>User profile</h3>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('admins')"><strong>Admin</strong></a>&nbsp;users, groups and organizations. Full access to tickets and system settings.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('agents')"><strong>Agent</strong></a>&nbsp;receives and resolves tickets from end-users. Access to tickets for according to the allocated roles.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('endusers')"><strong>End user</strong></a>&nbsp;submit support tickets. Access to tickets for according to the allocated roles.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('suppliers')"><strong>Supplier</strong></a>&nbsp;have no access to ticket.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('')"><strong>All</strong></a>&nbsp;users of workflow.</p>
+    </div>
+
+
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="exc-table">
+            <div class="exc-table_title">
+                <div class="display-1">Sources <small>of</small>
+
+                <mdl-select [(ngModel)]="color" placeholder="Container">
+                    <mdl-option *ngFor="let c of [{code:'',name:'Root element'},{code:'e1',name:'Element 1'},{code:'e2',name:'Element 2'}]" [value]="c.code">{{c.name}}</mdl-option>
+                </mdl-select>
+
+
+                </div>
+                <div class="exc-table_options">
+                    <mdl-textfield type="text" #searchfld (keyup)="doSearch(searchfld.value)" icon="search"></mdl-textfield>
+                </div>
+            </div>
+
+            <table class="mdl-data-table mdl-cell--12-col">
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric"></th>
+                        <th class="mdl-data-table__cell--non-numeric">TYPE</th>
+                        <th class="mdl-data-table__cell--non-numeric">NAME</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">IATA</th>                        
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">ICAO</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">CALLASIGN</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">COUNTRY</th>
+                        <th class="exc-table_but">
+                            <button #editUserButton mdl-button mdl-button-type="icon" (click)="openDetail($event,item)" mdl-tooltip="New">
+                                <mdl-icon>add</mdl-icon>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items; let row_num = index">
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)" style="margin:0px !important;padding:0px !important; width:54px !important; text-align:right;" [ngClass]="{'mdl-color--purple-400': item.country==='United States','mdl-color--indigo-400': item.country==='United Kingdom','mdl-color--cyan-400': item.country==='France'}">
+                            <nasfile [src]="item.thumbnail_url" [period]="10" class="exc-thumb"></nasfile>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.type}}</td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.name}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.iata}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.icao}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.callsign}}</td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.country}}</td>
+                        <td>
+                            <button id="editUserButton{{row_num}}" mdl-button mdl-button-type="icon" (click)="removeRow(item)" mdl-tooltip="Delete Item">
+                                <mdl-icon class="exc-dimmed">delete</mdl-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <navpanel [oid]="oid" [qvalue]="search" (ondata)="onData($event)"></navpanel>
+        </div>
+
+    </div>
+
+</div>

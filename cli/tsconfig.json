@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "system",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "lib": [ "es2015", "dom" ],
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "../server/public/app",
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
+  },
+  "include": [
+    "./app/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "gulpfile.ts",
+    "dist"
+  ],
+  "files": [
+    "./typings/hlsjs.d.ts"
+  ]
+}

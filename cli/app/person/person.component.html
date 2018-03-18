@@ -1,0 +1,52 @@
+<div class="exc-content mdl-grid">
+    <div class="exc-desc mdl-cell mdl-cell--3-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <h3><i class="material-icons">people_outline</i>Types of persons</h3>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('generated')"><strong class="mdl-color-text--purple-400">Generated</strong></a>&nbsp;generated during graph processing.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('import')"><strong class="mdl-color-text--indigo-400">Import</strong></a>&nbsp;created during training import.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('manual')"><strong class="mdl-color-text--cyan-400">Manual</strong></a>&nbsp;manually created via web.</p>
+        <p><a href="javascript:void(0)" (click)="setQueryParam('')"><strong>All</strong></a>&nbsp;types of persons.</p>
+    </div>
+
+
+    <div class="mdl-cell mdl-cell--9-col mdl-cell--12-col-tablet mdl-cell--12-col-phone">
+        <div class="exc-table">
+            <div class="exc-table_title">
+                <div class="display-1"><small>Table data of registered persons <small *ngIf="qtype">({{qtype}})</small></small></div>
+            </div>
+
+            <table class="mdl-data-table mdl-cell--12-col">
+                <thead>
+                    <tr>
+                        <th class="mdl-data-table__cell--non-numeric" colspan="2">FULL NAME</th>
+                        <th class="mdl-data-table__cell--non-numeric">FACES</th>
+                        <th class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone">CREATED</th>
+                        <th class="exc-table_but">
+                            <button #editUserButton mdl-button mdl-button-type="icon" (click)="openDetail($event)" mdl-tooltip="New">
+                                <mdl-icon>add</mdl-icon>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of items; let row_num = index">
+                        <td class="mdl-data-table__cell" style="margin:0px !important;padding:2px !important; width:1px !important;" 
+                            [ngClass]="{'mdl-color--purple-400': item.source==='generated','mdl-color--indigo-400': item.source==='import','mdl-color--cyan-400': item.source==='manual'}"></td>
+                        <td class="mdl-data-table__cell--non-numeric" (click)="openDetail($event,item)">{{item.details.first_name}} {{item.details.middle_name}} {{item.details.last_name}}</td>
+                        <td class="mdl-data-table__cell--non-numeric">
+                            <person5faces [qparent]="item.id" [qvalue]="change"></person5faces>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric mdl-cell--hide-phone" (click)="openDetail($event,item)">{{item.created | toDateTime | date: 'dd.MM.yy HH:mm'}}</td>
+                        <td>
+                            <button id="editUserButton{{row_num}}" mdl-button mdl-button-type="icon" (click)="removeRow(item)" mdl-tooltip="Delete Item">
+                                <mdl-icon class="exc-dimmed">delete</mdl-icon>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <navpanel [oid]="oid" [qtype]="qtype" [qvalue]="qvalue" (ondata)="onData($event)"></navpanel>
+        </div>
+    </div>
+
+</div>
+<dialog-outlet></dialog-outlet>
