@@ -1,0 +1,10 @@
+before_script:
+  - docker info
+build_image:
+  image: node:latest
+  script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.git.excuber.intranet:5005
+    - docker build -t registry.git.excuber.intranet:5005/excuber/excubernodejsserver .
+    - docker push registry.git.excuber.intranet:5005/excuber/excubernodejsserver
+  only:
+    - master
